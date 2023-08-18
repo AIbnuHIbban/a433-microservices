@@ -1,0 +1,32 @@
+# pakai docker compose versi 2
+version: '2'
+
+services:
+  # service untuk database
+  item-db:
+    # gunakan image mongo versi 3
+    image: mongo:3
+    # volume untuk menyimpan data
+    volumes:
+      - app-db:/data/db
+    # restart service jika terjadi error
+    restart: always
+
+
+  # service untuk aplikasi
+  item-app:
+    # gunakan image yang sudah dibuat
+    image: docker.pkg.github.com/aibnuhibban/a433-microservices/item-app:v1
+    # expose port 8080
+    ports:
+      - "80:8080"
+    # hubungkan ke service item-db
+    depends_on:
+      - item-db
+    # restart service jika terjadi error
+    restart: always
+
+# volume untuk menyimpan data
+volumes:
+  # nama volume
+  app-db:
